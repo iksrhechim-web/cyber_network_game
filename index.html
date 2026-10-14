@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d18">
+  <title>Cyber Defense | Network Under Attack</title>
+  <link rel="stylesheet" href="stylesheet.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Cyber Defense home">
+        <span class="brand-icon">⬡</span>
+        <span>CYBER<span class="accent">DEFENSE</span></span>
+      </a>
+      <div class="header-status">
+        <span class="status-dot"></span>
+        SIMULATION ENVIRONMENT
+      </div>
+      <div class="level-badge">LEVEL 01</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow"><span></span> SECURITY OPERATIONS CENTER</div>
+        <h1>NETWORK <span>UNDER ATTACK</span></h1>
+        <p>Analyze incoming traffic. Identify threats. Protect your infrastructure.</p>
+      </section>
+
+      <section class="stats-grid" aria-label="Game statistics">
+        <article class="stat-card">
+          <span class="stat-label">SCORE</span>
+          <strong id="score">0000</strong>
+          <span class="stat-note">POINTS EARNED</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">NETWORK SECURITY</span>
+          <strong id="securityValue" class="security-number">100%</strong>
+          <div class="progress-track">
+            <div id="securityBar" class="progress-fill"></div>
+          </div>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">THREATS BLOCKED</span>
+          <strong id="blocked">00</strong>
+          <span class="stat-note">MALICIOUS CONNECTIONS</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">TIME REMAINING</span>
+          <strong id="timer">01:30</strong>
+          <span class="stat-note">MISSION COUNTDOWN</span>
+        </article>
+      </section>
+
+      <section class="game-layout">
+        <div class="main-column">
+          <section class="panel network-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="section-tag">01 / INFRASTRUCTURE</span>
+                <h2>Network Topology</h2>
+              </div>
+              <span class="live-label"><span></span> LIVE</span>
+            </div>
+
+            <div class="network-map" id="networkMap">
+              <svg class="network-lines" viewBox="0 0 600 310"
+                   preserveAspectRatio="none" aria-hidden="true">
+                <line x1="300" y1="155" x2="115" y2="65"/>
+                <line x1="300" y1="155" x2="485" y2="65"/>
+                <line x1="300" y1="155" x2="115" y2="245"/>
+                <line x1="300" y1="155" x2="485" y2="245"/>
+                <line x1="115" y1="65" x2="115" y2="245"/>
+                <line x1="485" y1="65" x2="485" y2="245"/>
+              </svg>
+
+              <div class="network-node node-router">
+                <span class="node-symbol">⌘</span>
+                <span class="node-name">CORE ROUTER</span>
+                <span class="node-state">CONNECTED</span>
+              </div>
+
+              <div class="network-node node-firewall">
+                <span class="node-symbol">⬡</span>
+                <span class="node-name">FIREWALL</span>
+                <span class="node-state">ACTIVE</span>
+              </div>
+
+              <div class="network-node node-server">
+                <span class="node-symbol">▤</span>
+                <span class="node-name">WEB SERVER</span>
+                <span class="node-state">PROTECTED</span>
+              </div>
+
+              <div class="network-node node-database">
+                <span class="node-symbol">▥</span>
+                <span class="node-name">DATABASE</span>
+                <span class="node-state">PROTECTED</span>
+              </div>
+
+              <div class="network-node node-workstation">
+                <span class="node-symbol">▣</span>
+                <span class="node-name">WORKSTATION</span>
+                <span class="node-state">CONNECTED</span>
+              </div>
+            </div>
+
+            <div class="network-legend">
+              <span><i class="legend-dot safe"></i> Secure node</span>
+              <span><i class="legend-dot warning"></i> Threat detected</span>
+              <span><i class="legend-dot line-dot"></i> Network link</span>
+            </div>
+          </section>
+
+          <section class="panel traffic-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="section-tag">02 / TRAFFIC ANALYSIS</span>
+                <h2>Incoming Connections</h2>
+              </div>
+              <span id="trafficCount" class="count-badge">0 EVENTS</span>
+            </div>
+
+            <p class="panel-description">
+              Inspect each connection and choose the appropriate security action.
+            </p>
+
+            <div id="connectionList" class="connection-list"
+                 aria-live="polite">
+              <div class="empty-state">
+                <span class="empty-icon">⌁</span>
+                <p>Network traffic will appear here.</p>
+                <span>Initialize the mission to begin.</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="side-column">
+          <section class="panel mission-panel">
+            <span class="section-tag">MISSION BRIEFING</span>
+            <h2>Defend the Network</h2>
+            <p>
+              Your organization is experiencing suspicious inbound traffic.
+              Classify each connection before it compromises the network.
+            </p>
+            <div class="mission-objective">
+              <span>MISSION OBJECTIVE</span>
+              <strong>Survive for 90 seconds</strong>
+              <strong>Block every malicious IP</strong>
+            </div>
+            <div class="difficulty-row">
+              <span>THREAT LEVEL</span>
+              <span class="difficulty-value">ELEVATED</span>
+            </div>
+            <button id="startBtn" class="primary-btn">
+              <span>▶</span> START MISSION
+            </button>
+            <button id="restartBtn" class="secondary-btn" hidden>
+              ↻ RESTART MISSION
+            </button>
+            <p class="hint">Tip: Inspect the source, port, and behavior.</p>
+          </section>
+
+          <section class="panel intel-panel">
+            <div class="panel-heading compact">
+              <div>
+                <span class="section-tag">03 / THREAT INTELLIGENCE</span>
+                <h2>Analyst Notes</h2>
+              </div>
+            </div>
+            <div id="intelContent" class="intel-content">
+              <div class="intel-icon">◈</div>
+              <p>Threat intelligence will update as you analyze connections.</p>
+            </div>
+          </section>
+
+          <section class="panel event-panel">
+            <div class="panel-heading compact">
+              <div>
+                <span class="section-tag">04 / SYSTEM LOG</span>
+                <h2>Event Log</h2>
+              </div>
+            </div>
+            <div id="eventLog" class="event-log" aria-live="polite">
+              <p><time>SYS</time> Awaiting mission initialization...</p>
+            </div>
+          </section>
+        </aside>
+      </section>
+
+      <footer>
+        <span>CYBERDEFENSE SIMULATOR v1.0</span>
+        <span>EDUCATIONAL SIMULATION · NO REAL NETWORK ACCESS</span>
+      </footer>
+    </main>
+  </div>
+
+  <div id="resultModal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true"
+         aria-labelledby="resultTitle">
+      <div class="result-symbol" id="resultSymbol">⬡</div>
+      <span class="section-tag">MISSION REPORT</span>
+      <h2 id="resultTitle">Mission Complete</h2>
+      <p id="resultMessage"></p>
+      <div class="result-stats">
+        <div><span>FINAL SCORE</span><strong id="finalScore">0</strong></div>
+        <div><span>THREATS BLOCKED</span><strong id="finalBlocked">0</strong></div>
+        <div><span>ACCURACY</span><strong id="finalAccuracy">0%</strong></div>
+      </div>
+      <button id="playAgainBtn" class="primary-btn">↻ PLAY AGAIN</button>
+    </div>
+  </div>
+</body>
+</html>
