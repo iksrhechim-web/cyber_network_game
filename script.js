@@ -6,8 +6,9 @@
 // ========================================
 
 const MISSION_DURATION = 90;
-const SPAWN_INTERVAL = 3200;
-const MAX_PENDING_CONNECTIONS = 5;
+const SPAWN_INTERVAL = 15000;
+const MAX_PENDING_CONNECTIONS = 10;
+const EVENT_LOG_LIFETIME = 120000; // 2 minutes in milliseconds
 
 const $ = (id) => document.getElementById(id);
 
@@ -272,6 +273,7 @@ function startMission() {
 // CONNECTION GENERATION
 // ========================================
 
+
 function spawnConnection() {
   if (!game.running) return;
 
@@ -279,39 +281,14 @@ function spawnConnection() {
     (connection) => !connection.processed
   );
 
+  // Give the player time to analyze existing connections.
+  // Do not spawn more connections when the queue is full.
   if (pending.length >= MAX_PENDING_CONNECTIONS) {
-    // A malicious connection that remains unattended
-    // is treated as a missed threat.
-    const oldest = pending[0];
-
-    if (oldest && oldest.type === "threat") {
-      game.security = Math.max(0, game.security - 12);
-
-      addLog(
-        "ALERT",
-        `Unresolved threat ${oldest.ip} reached the queue limit.`,
-        "log-danger"
-      );
-
-      markNodeCompromised();
-      updateIntel(
-        "An unresolved malicious connection has been missed. " +
-        "Prioritize suspicious traffic before the queue fills."
-      );
-
-      updateDashboard();
-
-      if (game.security <= 0) {
-        endMission("breach");
-        return;
-      }
-    }
-
-    if (oldest) {
-      oldest.processed = true;
-      oldest.outcome = "MISSED";
-      renderConnections();
-    }
+    addLog(
+      "SYS",
+      "Traffic paused: analyze pending connections to continue."
+    );
+    return;
   }
 
   const template = chooseConnectionTemplate();
@@ -333,6 +310,7 @@ function spawnConnection() {
   renderConnections();
   updateDashboard();
 }
+
 
 function chooseConnectionTemplate() {
   // Avoid repeating the most recent two templates where possible.
@@ -595,6 +573,7 @@ function updateIntel(message) {
   `;
 }
 
+
 function addLog(source, message, className = "") {
   const row = document.createElement("p");
   const timestamp = document.createElement("time");
@@ -610,11 +589,12 @@ function addLog(source, message, className = "") {
   row.append(timestamp, text);
   elements.eventLog.prepend(row);
 
-  // Keep the log compact.
-  while (elements.eventLog.children.length > 20) {
-    elements.eventLog.lastElementChild.remove();
-  }
+  // Remove this specific log entry after 2 minutes.
+  setTimeout(() => {
+    row.remove();
+  }, EVENT_LOG_LIFETIME);
 }
+
 
 function markNodeCompromised() {
   const nodes = elements.networkMap.querySelectorAll(".network-node");
